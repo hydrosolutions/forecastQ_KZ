@@ -1,0 +1,13 @@
+name: forecastQ_CN
+title: forecastQ_CN
+username:
+account: hydrosolutionsglobal
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 210901
+bundleId: 970965
+url: https://hydrosolutionsglobal.shinyapps.io/forecastQ_CN/
+when: 1504767195.34763
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|TSTool_Test_NN-CN.R|dictionary.csv|dictionary_translated.csv|fc_test_2_CN.R|forecastQ_CN_translation.csv|global_CN.R|global_CN_1.R|parameterSensitivity.R|parameterSensitivity2.R|rGrassMusings.R|reshapingVectors.m|saveSerializedObjects.R|watershedDelineation.R

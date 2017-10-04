@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/data/
+/rest/
+/forecastQ_CN.Rproj
+global_CN.R
+/global_CN_1.R
+/global_CN.R
+\.DS_Store
+demo/app\.r
+watershedDelineation\.R
+TSTool_Test_NN-CN\.R
+rGrassMusings\.R
+fc_test_2_CN\.R
+forecastQ_CN_translation\.csv

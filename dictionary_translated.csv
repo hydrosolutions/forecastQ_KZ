@@ -1,0 +1,69 @@
+key, en, cn
+forecast1, FORECAST!, 预报
+forecastPage, Forecast, 预报
+avStations, Overview of Available Stations, 现有观测站概况
+showStations, Show Stations, 显示观测站
+statOverviewPage, Stations Overview, 观测站概况
+statInfo, Station information, 站点信息
+statData, Station Data, 观测站数据
+statSelect, Select Station, 选择观测站
+plotType, Choose plot type:, 选择图表类型
+editDataPage, Data, 数据
+editData, Enter/Edit New Data, 添加/编辑新数据
+submitData, Submit New Data, 提交新数据
+modelsPage, Models, 模型
+infoModels, Information on Models, 模型信息
+decForecast1, Decadal (10 days) Forecast, 十日预报
+decForecast2, Decadal Forecasts, 十日预报 
+stat1, 521400: Yingluoxia, 莺落峡（521400)
+stat2, 520800: Qilian, 祁连(520800)
+stat3, 520400: Zhamashike, 扎马什克(520400)
+monForecast1, Monthly Forecasts, 每月预报
+seasForecast1, Seasonal Forecasts (under development),季节性预报（开发中）
+forecastInfo, Forecast Information, 预报信息
+currDate, Current Date and Decade, 当前日期和时间段
+forecastQualPage, Assessment of Forecast Quality,评估预报质量
+helpPage, Help, 帮助
+helpText1, "Available stations are shown on the map. Gauging stations are shown in blue color. Meteorological 
+                               stations are indicated in red color. Stations can be selected from the pull down menu or
+                               through clicking on the map. The View Data' Button displays timeseries graphs as well as corresponding
+                               norms and available data from the last two years.", "地图上显示的现有观测站点中蓝色的是水文站，红色的是气象站。选择站点可以采用下拉菜单或者点击地图上的站点。点击'查看数据'可以显示过去两年的时间序列图表，相应时间段平均和所有数据"
+
+helpText2, "From the pull down menu below select station for viewing and editing data. You have to 
+                               submit the new data by clicking the corresponding Submit Data button below. The data will be stored remotely 
+                               and remain available for later sessions.", "从下拉菜单选择站点可以显示和编辑数据。提交新数据需要点击下方的提交数据键。数据将会被储存并在以后的预报计算中使用"
+
+helpText3, "Summary information of models and their quality is provided for each station.
+                               The reported RMSE is from the ensemble model and is assessed on a test set that is unseen during training.
+                               The ensemble model is a simple 'linear blend' of the individual models trained.
+                               The performance of the individual models is shown in the corresponding tables
+                               (see also documentation on caretEnsemble for more information).",
+                               "每个站点都有模型的简要信息及其预报质量。显示的RMSE是联合模型使用未参加训练的数据集进行测试评估的。联合模型是由经过驯化的各个独立模型进行“线性混合”产生的。各个模型的性能在相应的表格中有列出，详细信息请参阅caretEnsemble的文档"
+
+helpText4, "A delay coordinate embedding approach is utlizied.
+                               For all models, lagged decadal (10-day) data from the closest meteorological station is utilized
+                               together with the past lagged values from the corresponding discharge time series.
+                               A lag five has been deemed optimal for performance. Seasonality is accounted for by adding
+                               a decade identifier to the predictor list.", 
+                               "模型使用了延迟坐标嵌入方法。所有模型都使用了距离最近的气象站的以十天为一时间段的数据及其相应的径流时间序列。滞后五个时间段的模型性能表现最佳。 季节性在模型中是通过将时期标识符添加到预测变量列表来考虑的。"
+
+helpText5, "For each station model training is carried out with data up to and including 31-12-1999.
+                               The test set data includes data from 1-1-2000 onwards.",“对于每个站点，模型的训练使用的数据是1999年12月31日以前的数据，测试数据集采用的是从2000年1月1日以后的数据。"
+
+helpText6, "Decadal, monthly and seasonal forecasts are computed for each decade and shown for all gauging stations in the corresponding
+                               tabs. The latest available data is fetched and forecasts are carried out while using the latest
+                               decade for which complete data is available. The forecast values are highlighted in orange color.", “十日，月度和季节性预报每十日计算一次，并在所有水文站相应的预报中显示。 最新获取的数据在模型的更新预报计算中使用。 预测值用橙色显示。"
+
+helpText7, "Important note: Please make sure that the latest data (see Data page) is always available (discharge and precipitation and temperature
+                               from all stations) for a valid forecast (labelled [Valid]). Otherwise, forecast target decades are in the past and forecasted values are outdated (labelled [Outdated]).",“重要提示：请确保最新数据（参见数据页，包括所有站点的水文，降雨和气温数据）一直在更新，这样模型才能进行有效预报（标记为[有效]）。 否则，如果模型进行预报的目标日期是在过去，预测值会显示已过时（标记为[过时]）。"
+
+helpText8, "Assessment of quality of forecasts is calculated based on past model test performance up and including 
+                               the last known values. The test set includes
+                               data from January 2000 until and including the last known data. the quality criteria are shown as red and blue
+                               lines respectively where, for each decade, the red line is 0.674 * rmse(delta Q)/std(Q) in the case of the decadal
+                               forecasts and 0.674 * rmse(Q)/std(Q) for monthly forecasts. The blue line, i.e. a less stringent quality criteria is
+                               at 0.8 * rmse(delta Q)/std(Q) and 0.8 * rmse(Q)/std(Q) respectively. Forecast quality of all stations is shown.", “对模型预测质量的评估是基于包括最新数据在内的所有测试数据测试出的模型性能。测试数据包括从2000年1月起直到最新的数据，质量标准分别显示为红色和蓝色线，其中十天预报的红线为0.674 * rmse（delta Q）/ std（Q），月预测的红线为0.674 * rmse（Q）/std（Q）。 而蓝线是不太严格的质量标准，十天和月预报的标准分别为0.8 * rmse（delta Q）/ std（Q）和0.8 * rmse（Q）/std（Q）。所有水文站点模型的预报质量都有显示。
+
+helpText9, "More detailed information on modeling approach is coming here.", “有关建模方法的更多详细信息请访问这里。"
+
+

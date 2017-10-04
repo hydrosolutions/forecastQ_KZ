@@ -1,0 +1,11 @@
+name: forecastQ
+title: forecastQ
+account: hydrosolutionsglobal
+server: shinyapps.io
+appId: 139272
+bundleId: 622138
+url: https://hydrosolutionsglobal.shinyapps.io/forecastQ/
+when: 1479817105.49321
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|saveSerializedObjects.R|~$dataConcept.xlsx|data/.DS_Store|rest/.DS_Store|rest/ParameterSensitivity.xlsx|rest/app.R|rest/dataConcept.xlsx|rest/exampleInteractiveTable.R|rest/forecastQ.Rproj|rest/forecastR_decadal.R|rest/formattableExample.R|rest/googleSheetsCCF.R|rest/hydrosolutionsLogo_Vec.pdf|rest/layout.R|rest/loadDataExample.R|rest/modelfitting_App|rest/modelfitting_forecastR|rest/parameterSensitivity.R|rest/removeFilesfromGit|rest/samplePlotSwitchRadioButton.R|rest/shinyWebsiteSketch.graffle|rest/testDataUpload.R
