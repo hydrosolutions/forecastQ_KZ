@@ -3,7 +3,7 @@
 # tobias siegfried, hydrosolutions Ltd., 2017
 
 shinyServer(function(input,output,session) {
-  
+
   # STATIONS OVERVIEW PAGE ---------------------------------------------------------------
   # REACTIVE INPUT LOCATION
   textbits <- reactive({
@@ -51,8 +51,8 @@ shinyServer(function(input,output,session) {
     doy <- floor(as.numeric(doy)/10 + 1)
     list("decadeNumber"=doy,"year"=substring(today,1,4))
   })
-  
-  
+
+
   # FORECAST PAGE ------------------------------------------------------------------------
   # DECADAL
   output$fc521400dec <- renderText({
@@ -66,21 +66,21 @@ shinyServer(function(input,output,session) {
     compNorm <- normsQ.dec[1,target]
     if (currD<36){
       if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Valid]: Latest forecast available: Decade",
+                       target, paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Outdated]: Latest forecast available: Decade",
+                       target, paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       }
     } else {
       if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Valid]: Latest forecast available: Decade",
+                       target, paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
+        fcStr <- paste("[Outdated]: Latest forecast available: Decade",
                        target, paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       }
@@ -99,92 +99,92 @@ shinyServer(function(input,output,session) {
     autoplot.zoo(fcDec[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
     #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
   })
-  output$fc520800dec <- renderText({
-    idxFC <- which(!is.na(forecast.dec[[2]][,3])==TRUE) %>% max
-    target <- coredata(forecast.dec[[2]][idxFC,1])
-    targetY <- substring(time(forecast.dec[[2]][idxFC,1]),1,4) %>% as.numeric
-    fcValue <- coredata(forecast.dec[[2]][idxFC,3])
-    doy <- strftime(Sys.time(), format = "%j")
-    currD <- floor(as.numeric(doy)/10 + 1)
-    currY <- as.numeric(substring(Sys.time(),1,4))
-    compNorm <- normsQ.dec[2,target]
-    if (currD<36){
-      if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    } else {
-      if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""),
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    }
-  }) 
-  output$obsFcComp520800dec <- renderPlot({
-    idx <- 2
-    idxFC <- which(!is.na(forecast.dec[[1]][,3])==TRUE) %>% max
-    fcDec <- forecast.dec[[idx]]
-    tsN <- normsQ.dec[idx,(-37:-38)]
-    tsN <- cbind(tsN,tsN) %>% t
-    fcDec$decade <- tsN
-    latestFC <- fcDec[idxFC,3]
-    fcDec <- merge(fcDec,latestFC)
-    names(fcDec) <- c("Norm","Q","Forecast","Latest Forecast")
-    autoplot.zoo(fcDec[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
-  })
-  output$fc520400dec <- renderText({
-    idxFC <- which(!is.na(forecast.dec[[3]][,3])==TRUE) %>% max
-    target <- coredata(forecast.dec[[3]][idxFC,1])
-    targetY <- substring(time(forecast.dec[[3]][idxFC,1]),1,4) %>% as.numeric
-    fcValue <- coredata(forecast.dec[[3]][idxFC,3])
-    doy <- strftime(Sys.time(), format = "%j")
-    currD <- floor(as.numeric(doy)/10 + 1)
-    currY <- as.numeric(substring(Sys.time(),1,4))
-    compNorm <- normsQ.dec[3,target]
-    if (currD<36){
-      if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    } else {
-      if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Decade", 
-                       target, paste("(", targetY, ")", sep=""),
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    }
-  })
-  output$obsFcComp520400dec <- renderPlot({
-    idx <- 3
-    idxFC <- which(!is.na(forecast.dec[[1]][,3])==TRUE) %>% max
-    fcDec <- forecast.dec[[idx]]
-    tsN <- normsQ.dec[idx,(-37:-38)]
-    tsN <- cbind(tsN,tsN) %>% t
-    fcDec$decade <- tsN
-    latestFC <- fcDec[idxFC,3]
-    fcDec <- merge(fcDec,latestFC)
-    names(fcDec) <- c("Norm","Q","Forecast","Latest Forecast")
-    autoplot.zoo(fcDec[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
-  })
+  # output$fc520800dec <- renderText({
+  #   idxFC <- which(!is.na(forecast.dec[[2]][,3])==TRUE) %>% max
+  #   target <- coredata(forecast.dec[[2]][idxFC,1])
+  #   targetY <- substring(time(forecast.dec[[2]][idxFC,1]),1,4) %>% as.numeric
+  #   fcValue <- coredata(forecast.dec[[2]][idxFC,3])
+  #   doy <- strftime(Sys.time(), format = "%j")
+  #   currD <- floor(as.numeric(doy)/10 + 1)
+  #   currY <- as.numeric(substring(Sys.time(),1,4))
+  #   compNorm <- normsQ.dec[2,target]
+  #   if (currD<36){
+  #     if ((target==(currD+1))&(targetY==currY)){ # VALID
+  #       fcStr <- paste("[Valid]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else { # OUTDATED
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   } else {
+  #     if (currD==1){
+  #       fcStr <- paste("[Valid]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else {
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   }
+  # })
+  # output$obsFcComp520800dec <- renderPlot({
+  #   idx <- 2
+  #   idxFC <- which(!is.na(forecast.dec[[1]][,3])==TRUE) %>% max
+  #   fcDec <- forecast.dec[[idx]]
+  #   tsN <- normsQ.dec[idx,(-37:-38)]
+  #   tsN <- cbind(tsN,tsN) %>% t
+  #   fcDec$decade <- tsN
+  #   latestFC <- fcDec[idxFC,3]
+  #   fcDec <- merge(fcDec,latestFC)
+  #   names(fcDec) <- c("Norm","Q","Forecast","Latest Forecast")
+  #   autoplot.zoo(fcDec[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
+  # })
+  # output$fc520400dec <- renderText({
+  #   idxFC <- which(!is.na(forecast.dec[[3]][,3])==TRUE) %>% max
+  #   target <- coredata(forecast.dec[[3]][idxFC,1])
+  #   targetY <- substring(time(forecast.dec[[3]][idxFC,1]),1,4) %>% as.numeric
+  #   fcValue <- coredata(forecast.dec[[3]][idxFC,3])
+  #   doy <- strftime(Sys.time(), format = "%j")
+  #   currD <- floor(as.numeric(doy)/10 + 1)
+  #   currY <- as.numeric(substring(Sys.time(),1,4))
+  #   compNorm <- normsQ.dec[3,target]
+  #   if (currD<36){
+  #     if ((target==(currD+1))&(targetY==currY)){ # VALID
+  #       fcStr <- paste("[Valid]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else { # OUTDATED
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   } else {
+  #     if (currD==1){
+  #       fcStr <- paste("[Valid]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else {
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Decade",
+  #                      target, paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   }
+  # })
+  # output$obsFcComp520400dec <- renderPlot({
+  #   idx <- 3
+  #   idxFC <- which(!is.na(forecast.dec[[1]][,3])==TRUE) %>% max
+  #   fcDec <- forecast.dec[[idx]]
+  #   tsN <- normsQ.dec[idx,(-37:-38)]
+  #   tsN <- cbind(tsN,tsN) %>% t
+  #   fcDec$decade <- tsN
+  #   latestFC <- fcDec[idxFC,3]
+  #   fcDec <- merge(fcDec,latestFC)
+  #   names(fcDec) <- c("Norm","Q","Forecast","Latest Forecast")
+  #   autoplot.zoo(fcDec[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
+  # })
 # MONTHLY
   output$fc521400mon <- renderText({
     idxFC <- which(!is.na(forecast.mon[[1]][,3])==TRUE) %>% max
@@ -197,21 +197,21 @@ shinyServer(function(input,output,session) {
     compNorm <- normsQ.dec[1,target]
     if (currD<36){
       if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Valid]: Latest forecast available: Month",
+                       ceil(target/3), paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Outdated]: Latest forecast available: Month",
+                       ceil(target/3), paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       }
     } else {
       if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
+        fcStr <- paste("[Valid]: Latest forecast available: Month",
+                       ceil(target/3), paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
+        fcStr <- paste("[Outdated]: Latest forecast available: Month",
                        ceil(target/3), paste("(", targetY, ")", sep=""),
                        "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
       }
@@ -230,102 +230,102 @@ shinyServer(function(input,output,session) {
     autoplot.zoo(fcMon[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
     #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
   })
-  output$fc520800mon <- renderText({
-    idxFC <- which(!is.na(forecast.mon[[2]][,3])==TRUE) %>% max
-    target <-  mod(coredata(forecast.mon[[2]][idxFC,1])+1,36)
-    targetY <- substring(time(forecast.mon[[2]][idxFC,1]),1,4) %>% as.numeric
-    fcValue <- coredata(forecast.mon[[2]][idxFC,3])
-    doy <- strftime(Sys.time(), format = "%j")
-    currD <- floor(as.numeric(doy)/10 + 1)
-    currY <- as.numeric(substring(Sys.time(),1,4))
-    compNorm <- normsQ.dec[1,target]
-    if (currD<36){
-      if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    } else {
-      if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""),
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    }
-  })
-  output$obsFcComp520800mon <- renderPlot({
-    idx <- 2
-    idxFC <- which(!is.na(forecast.mon[[1]][,3])==TRUE) %>% max
-    fcMon <- forecast.mon[[idx]]
-    tsN <- normsQ.mon[idx,(-13:-14)]
-    tsN <- cbind(tsN,tsN) %>% t
-    fcMon$decade <- tsN
-    latestFC <- fcMon[idxFC,3]
-    fcMon <- merge(fcMon,latestFC)
-    names(fcMon) <- c("Norm","Q","Forecast","Latest Forecast")
-    autoplot.zoo(fcMon[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
-    #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
-  })
-  output$fc520400mon <- renderText({
-    idxFC <- which(!is.na(forecast.mon[[3]][,3])==TRUE) %>% max
-    target <-  mod(coredata(forecast.mon[[3]][idxFC,1])+1,36)
-    targetY <- substring(time(forecast.mon[[3]][idxFC,1]),1,4) %>% as.numeric
-    fcValue <- coredata(forecast.mon[[3]][idxFC,3])
-    doy <- strftime(Sys.time(), format = "%j")
-    currD <- floor(as.numeric(doy)/10 + 1)
-    currY <- as.numeric(substring(Sys.time(),1,4))
-    compNorm <- normsQ.dec[3,target]
-    if (currD<36){
-      if ((target==(currD+1))&(targetY==currY)){ # VALID
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else { # OUTDATED
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    } else {
-      if (currD==1){
-        fcStr <- paste("[Valid]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""), 
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      } else {
-        fcStr <- paste("[Outdated]: Latest forecast available: Month", 
-                       ceil(target/3), paste("(", targetY, ")", sep=""),
-                       "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
-      }
-    }
-  })
-  output$obsFcComp520400mon <- renderPlot({
-    idx <- 3
-    idxFC <- which(!is.na(forecast.mon[[1]][,3])==TRUE) %>% max
-    fcMon <- forecast.mon[[idx]]
-    tsN <- normsQ.mon[idx,(-13:-14)]
-    tsN <- cbind(tsN,tsN) %>% t
-    fcMon$decade <- tsN
-    latestFC <- fcMon[idxFC,3]
-    fcMon <- merge(fcMon,latestFC)
-    names(fcMon) <- c("Norm","Q","Forecast","Latest Forecast")
-    autoplot.zoo(fcMon[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
-    #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
-  })
-  
+  # output$fc520800mon <- renderText({
+  #   idxFC <- which(!is.na(forecast.mon[[2]][,3])==TRUE) %>% max
+  #   target <-  mod(coredata(forecast.mon[[2]][idxFC,1])+1,36)
+  #   targetY <- substring(time(forecast.mon[[2]][idxFC,1]),1,4) %>% as.numeric
+  #   fcValue <- coredata(forecast.mon[[2]][idxFC,3])
+  #   doy <- strftime(Sys.time(), format = "%j")
+  #   currD <- floor(as.numeric(doy)/10 + 1)
+  #   currY <- as.numeric(substring(Sys.time(),1,4))
+  #   compNorm <- normsQ.dec[1,target]
+  #   if (currD<36){
+  #     if ((target==(currD+1))&(targetY==currY)){ # VALID
+  #       fcStr <- paste("[Valid]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else { # OUTDATED
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   } else {
+  #     if (currD==1){
+  #       fcStr <- paste("[Valid]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else {
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   }
+  # })
+  # output$obsFcComp520800mon <- renderPlot({
+  #   idx <- 2
+  #   idxFC <- which(!is.na(forecast.mon[[1]][,3])==TRUE) %>% max
+  #   fcMon <- forecast.mon[[idx]]
+  #   tsN <- normsQ.mon[idx,(-13:-14)]
+  #   tsN <- cbind(tsN,tsN) %>% t
+  #   fcMon$decade <- tsN
+  #   latestFC <- fcMon[idxFC,3]
+  #   fcMon <- merge(fcMon,latestFC)
+  #   names(fcMon) <- c("Norm","Q","Forecast","Latest Forecast")
+  #   autoplot.zoo(fcMon[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
+  #   #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
+  # })
+  # output$fc520400mon <- renderText({
+  #   idxFC <- which(!is.na(forecast.mon[[3]][,3])==TRUE) %>% max
+  #   target <-  mod(coredata(forecast.mon[[3]][idxFC,1])+1,36)
+  #   targetY <- substring(time(forecast.mon[[3]][idxFC,1]),1,4) %>% as.numeric
+  #   fcValue <- coredata(forecast.mon[[3]][idxFC,3])
+  #   doy <- strftime(Sys.time(), format = "%j")
+  #   currD <- floor(as.numeric(doy)/10 + 1)
+  #   currY <- as.numeric(substring(Sys.time(),1,4))
+  #   compNorm <- normsQ.dec[3,target]
+  #   if (currD<36){
+  #     if ((target==(currD+1))&(targetY==currY)){ # VALID
+  #       fcStr <- paste("[Valid]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else { # OUTDATED
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   } else {
+  #     if (currD==1){
+  #       fcStr <- paste("[Valid]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     } else {
+  #       fcStr <- paste("[Outdated]: Latest forecast available: Month",
+  #                      ceil(target/3), paste("(", targetY, ")", sep=""),
+  #                      "- mean discharge:", round(fcValue,digits = 0), "[m^3/s], Norm:", round(compNorm,digits=1), "[m^3/s]")
+  #     }
+  #   }
+  # })
+  # output$obsFcComp520400mon <- renderPlot({
+  #   idx <- 3
+  #   idxFC <- which(!is.na(forecast.mon[[1]][,3])==TRUE) %>% max
+  #   fcMon <- forecast.mon[[idx]]
+  #   tsN <- normsQ.mon[idx,(-13:-14)]
+  #   tsN <- cbind(tsN,tsN) %>% t
+  #   fcMon$decade <- tsN
+  #   latestFC <- fcMon[idxFC,3]
+  #   fcMon <- merge(fcMon,latestFC)
+  #   names(fcMon) <- c("Norm","Q","Forecast","Latest Forecast")
+  #   autoplot.zoo(fcMon[,-4],facets = NULL) + scale_colour_manual(values=c("green","blue","red","red")) + labs(x = "Date", y = "Q [m^3/s]")
+  #   #last_plot() + geom_point(aes(x = Index, y = Value), data = fortify(fcDec[idxFC,4], melt = TRUE)) + labs(x = "Date", y = "Q [m^3/s]")
+  # })
+
   # DATA PAGE ------------------------------------------------------------------------
   # REACTIVE INPUT SELECTION
   textbitsEdit <- reactive({ # for data edit page
     textbitsEdit <- locsUnique[locsUnique$loc==input$location_edit,]
     return(textbitsEdit)
   })
-  
+
   output$dataTableEdit1TypeText <- renderText({
     if (typeEdit() == "gauge"){
       "Discharge Q [m3/s]"
@@ -334,7 +334,7 @@ shinyServer(function(input,output,session) {
       "Precipitation [mm] and Temperature [deg. C]"
     }
   })
-  
+
   values <- reactiveValues()
   observeEvent(input$location_edit,{
     tabLength <- model.par$editTableL
@@ -359,12 +359,12 @@ shinyServer(function(input,output,session) {
     values[[input$location_edit]] <- temp
     dimM <- dim(values[[input$location_edit]])[1]
     todayY <- as.numeric(substring(Sys.time(),1,4))
-    
+
     if (typeEdit() == "gauge"){ # UPDATE GOOGLE SHEETS - Q
-      
+
       statSelected <- textbitsEdit()$loc
       statID <- which(match(names(Q),statSelected)==1)
-      
+
       rStartIdxQ <- temp[1,]$Year
       newDataQ <- Reshape(temp$Q,36,2) %>% t %>% as.data.frame()
       newDataQ["YEAR"] <- c(rStartIdxQ,rStartIdxQ+1)
@@ -372,7 +372,7 @@ shinyServer(function(input,output,session) {
       names(newDataQ) <- gsub("V", "D", names(newDataQ))
       df2update <- Q[[statID]]$data.df %>% as.data.frame()
       df2update[match(newDataQ$YEAR,df2update$YEAR),] <- newDataQ
-      
+
       if (remote==1){
         putdata(input$location_edit,"Q",df2update,1) # UPDATE GOOGLE SHEETS
       } else {
@@ -380,13 +380,13 @@ shinyServer(function(input,output,session) {
         prepareDataFun(stationsLocN,modelListN,modelParN,gaugePMN,remote) # THIS FUNCTION NEEDS TO BE WRITTEN FIRST!
         browser()
       }
-      
+
       # UPDATE WORKSPACE (QUESTION: CAN WE AVOID TO RELOAD ALL DATA AS DONE IN global.R?)
       ts[(dimM-model.par$editTableL+1):dimM,colnames(ts)==input$location_edit] <- temp[,colnames(temp)=="Q"] # desktop variable update!
-      
-      
+
+
     } else {  # UPDATE GOOGLE SHEETS - P,T
-      
+
       statID_PT <- which(match(names(P),input$location_edit)==1)
 
       rStartIdxP <- temp[1,]$Year
@@ -399,12 +399,12 @@ shinyServer(function(input,output,session) {
       newDataP <- newDataP[c(37,1:36)]
       names(newDataT) <- gsub("V", "D", names(newDataT))
       names(newDataP) <- gsub("V", "D", names(newDataP))
-      
+
       df2updateT <- T[[statID_PT]]$data.df %>% as.data.frame()
       df2updateP <- P[[statID_PT]]$data.df %>% as.data.frame()
       df2updateT[match(newDataT$YEAR,df2updateT$YEAR),] <- newDataT
       df2updateP[match(newDataP$YEAR,df2updateP$YEAR),] <- newDataP
-      
+
       if (remote==1){
         putdata(input$location_edit,"P",df2updateP,1) # UPDATE GOOGLE SHEETS - P
         putdata(input$location_edit,"T",df2updateT,1) # UPDATE GOOGLE SHEETS - T
@@ -416,18 +416,18 @@ shinyServer(function(input,output,session) {
       ts[(dimM-model.par$editTableL+1):dimM,colnames(ts)==paste(input$location_edit,".T",sep="")] <- temp[,colnames(temp)=="T"] # further dependencies also need to be updated!
     }
   })
-  
+
   # REACTIVE VALUES (OUTPUT FOR VISUALIZATION/X-CHECKING)
   df <- reactive({
     df <- values[[input$location_edit]]
   })
-  
+
   # OUTPUT OF EDITTABLE1
   output$editTable1 <- renderRHandsontable({
     hot <- rhandsontable(df(), width = 400, height = 800, rowHeaderWidth = 100)
     hot <- hot %>% hot_col("Decade", format = "0") %>% hot_table(highlightCol = TRUE, highlightRow = TRUE)
   })
-  
+
   output$plotEditData <- renderPlot({
     if (typeEdit()=="gauge"){
       ts1 <- zoo(df()[,3],order.by = as.Date(rownames(df())))
@@ -445,11 +445,11 @@ shinyServer(function(input,output,session) {
       autoplot.zoo(ts1,facets = Series ~ .)
     }
   })
-  
+
   output$testTable <- renderTable({
     df()
   })
-  
+
   # STATIONS OVERVIEW PAGE ---------------------------------------------------------------
   tsQdata <- reactive({tsQ[,colnames(tsQ)==input$location]})
   tsPdata <- reactive({tsP[,colnames(tsP)==paste(input$location,".P",sep="")]})
@@ -474,8 +474,8 @@ shinyServer(function(input,output,session) {
     normsTdata <- normsPdata1
     return(normsTdata)
   })
-  
-  # GAUGE SWITCHER 
+
+  # GAUGE SWITCHER
   type <- reactive({
     type <- locsUnique[locsUnique$loc==input$location,]$type
     return(type)
@@ -484,30 +484,30 @@ shinyServer(function(input,output,session) {
     typeEdit <- locsUnique[locsUnique$loc==input$location_edit,]$type
     return(typeEdit)
   })
-  
+
   code <- reactive({
     code <- locsUnique[locsUnique$loc==input$location,]$code
     return(code) # this is the code of the selected station, i.e either gauge or meteo station!
   })
-  
+
   codeEdit <- reactive({
     codeEdit <- locsUnique[locsUnique$loc==input$location_edit,]$code
     return(codeEdit)
   })
-  
+
   output$timeseriesGraphs <- renderDygraph({
     if (type() == "gauge") {
       dygraph(tsQdata(), main="Discharge Time Series",xlab="time",ylab="Q [m^3/s]") %>% dyRangeSelector()
     } else {
       toPlot <- cbind(tsPdata(),tsTdata())
-      dygraph(toPlot, main = "Meteorological Station Time Series") %>% 
+      dygraph(toPlot, main = "Meteorological Station Time Series") %>%
         dyAxis("y", label = "Precipitation [mm/decade]") %>%
         dyAxis("y2", label = "Temperature [deg. C]", independentTicks = FALSE) %>%
         dySeries("tsTdata()", axis = 'y2') %>%
         dyRangeSelector()
     }
   })
-  
+
   output$NormsGraphs <- renderPlot({
     if (type() == "gauge") {
       actData <- tail(dfQ[dfQ$id==code(),],2)
@@ -515,8 +515,8 @@ shinyServer(function(input,output,session) {
       normsQdata <- rbind(normsQdata(),actData)
       normsQdata$id <- c(1,2,3)
       plot_normsQdata <- melt(normsQdata,id.var="id")
-      ggplot(plot_normsQdata,aes(x=variable,y=value,group=id,color=factor(id))) + 
-        geom_line() + 
+      ggplot(plot_normsQdata,aes(x=variable,y=value,group=id,color=factor(id))) +
+        geom_line() +
         geom_point() +
         xlab("Decade") + ylab("Discharge [m^3/s]") +
         scale_colour_discrete(name = "Data", labels=c("Norm","Last Year Data","Current Year Data")) +
@@ -550,89 +550,89 @@ shinyServer(function(input,output,session) {
       multiplot(pT,pP,cols=1)
     }
   })
-  
+
   output$forecastQual_16279_dec <- renderPlot({print(model.dec.qual[[1]][[1]])})
-  output$forecastQual_16290_dec <- renderPlot({print(model.dec.qual[[2]][[1]])})
-  output$forecastQual_16294_dec <- renderPlot({print(model.dec.qual[[3]][[1]])})
+  #output$forecastQual_16290_dec <- renderPlot({print(model.dec.qual[[2]][[1]])})
+  #output$forecastQual_16294_dec <- renderPlot({print(model.dec.qual[[3]][[1]])})
   output$forecastQual_16279_mon <- renderPlot({print(model.mon.qual[[1]][[1]])})
-  output$forecastQual_16290_mon <- renderPlot({print(model.mon.qual[[2]][[1]])})
-  output$forecastQual_16294_mon <- renderPlot({print(model.mon.qual[[3]][[1]])})
-  
+  #output$forecastQual_16290_mon <- renderPlot({print(model.mon.qual[[2]][[1]])})
+  #output$forecastQual_16294_mon <- renderPlot({print(model.mon.qual[[3]][[1]])})
+
   output$model_16279_dec <- renderText({tt <- capture.output(summary(model.dec[[1]]))
   return(tt[1:4])
   })
-  output$model_16290_dec <- renderText({tt <- capture.output(summary(model.dec[[2]]))
-  return(tt[1:4])
-  })
-  output$model_16294_dec <- renderText({tt <- capture.output(summary(model.dec[[3]]))
-  return(tt[1:4])
-  })
+  # output$model_16290_dec <- renderText({tt <- capture.output(summary(model.dec[[2]]))
+  # return(tt[1:4])
+  # })
+  # output$model_16294_dec <- renderText({tt <- capture.output(summary(model.dec[[3]]))
+  # return(tt[1:4])
+  # })
   output$model_16279_mon <- renderText({tt <- capture.output(summary(model.mon[[1]]))
   return(tt[1:4])
   })
-  output$model_16290_mon <- renderText({tt <- capture.output(summary(model.mon[[2]]))
-  return(tt[1:4])
-  })
-  output$model_16294_mon <- renderText({tt <- capture.output(summary(model.mon[[3]]))
-  return(tt[1:4])
-  })
-  
+  # output$model_16290_mon <- renderText({tt <- capture.output(summary(model.mon[[2]]))
+  # return(tt[1:4])
+  # })
+  # output$model_16294_mon <- renderText({tt <- capture.output(summary(model.mon[[3]]))
+  # return(tt[1:4])
+  # })
+
   output$model_16279_decEnsemble <- renderTable({tt <- summary(model.dec[[1]])
   return(tt)
   })
-  output$model_16290_decEnsemble <- renderTable({tt <- summary(model.dec[[2]])
-  return(tt)
-  })
-  output$model_16294_decEnsemble <- renderTable({tt <- summary(model.dec[[3]])
-  return(tt)
-  })
+  # output$model_16290_decEnsemble <- renderTable({tt <- summary(model.dec[[2]])
+  # return(tt)
+  # })
+  # output$model_16294_decEnsemble <- renderTable({tt <- summary(model.dec[[3]])
+  # return(tt)
+  # })
   output$model_16279_monEnsemble <- renderTable({tt <- summary(model.mon[[1]])
   return(tt)
   })
-  output$model_16290_monEnsemble <- renderTable({tt <- summary(model.mon[[2]])
-  return(tt)
-  })
-  output$model_16294_monEnsemble <- renderTable({tt <- summary(model.mon[[3]])
-  return(tt)
-  })
-  
+  # output$model_16290_monEnsemble <- renderTable({tt <- summary(model.mon[[2]])
+  # return(tt)
+  # })
+  # output$model_16294_monEnsemble <- renderTable({tt <- summary(model.mon[[3]])
+  # return(tt)
+  # })
+
   # GRAPHICAL OUTPUT ----
-  output$dygraphFullTimeSeriesQ <- 
-    renderDygraph({dygraph(tsQdata(), main="Discharge Time Series",xlab="time",ylab="Q [m^3/s]") %>% dyRangeSelector() }) 
-  output$dygraphFullTimeSeriesT <- 
+  output$dygraphFullTimeSeriesQ <-
+    renderDygraph({dygraph(tsQdata(), main="Discharge Time Series",xlab="time",ylab="Q [m^3/s]") %>% dyRangeSelector() })
+  output$dygraphFullTimeSeriesT <-
     renderDygraph({dygraph(tsTdata(), main = "Temperature Time Series",xlab="time",ylab="T [deg C]") %>% dyRangeSelector() })
-  output$dygraphFullTimeSeriesP <- 
+  output$dygraphFullTimeSeriesP <-
     renderDygraph({dygraph(tsPdata(), main = "Precipitation Time Series",xlab="time",ylab="P [mm]") %>% dyRangeSelector() })
-  
-  output$normActualQ <- 
+
+  output$normActualQ <-
     renderDygraph({
       data2render <- as.data.frame(t(rbind("decade" = as.vector(1:36), "normQ"=data()$normQ,
                                            "previousYQ" = data()$tsQtable[nrow(data()$tsQtable)-1,-1],
                                            "currentYQ" = data()$tsQtable[nrow(data()$tsQtable),-1])))
       dygraph(data2render, main = tstitle()$normstitleQ,xlab="decade",ylab="Q [m^3/s]")
     })
-  
+
   # HELP PAGE ----
-  ############# GENERAL DEFINITIONS ############# 
+  ############# GENERAL DEFINITIONS #############
   #SMTP Server Detail: list(host.name = "aspmx.l.google.com", port = 25) works for gmail recipient only. Check the spam folder.
   #Other options: list(host.name = "smtp.gmail.com", port = 465, user.name = "gmail_username", passwd = "password", ssl = TRUE)
-  #See mailR for reference: https://github.com/rpremraj/mailR 
+  #See mailR for reference: https://github.com/rpremraj/mailR
   smtp_setting = list(host.name = "aspmx.l.google.com", port = 25)
-  
+
   #Stores the captcha text and result
   captcha <- reactiveValues()
-  
+
   #Updates the captcha
   changecaptcha <- function() {
     set.seed(as.integer((as.double(Sys.time()) * 8764 + Sys.getpid()) %% 2 ^ 31))
     n1 = sample(c(1:10), 1)
     set.seed(as.integer((as.double(Sys.time()) * 345 + Sys.getpid()) %% 2 ^ 26))
     n2 = sample(c(1:10), 1)
-    
+
     captcha$text = paste(n1, " + ", n2, " = ", sep = "")
     captcha$result = n1 + n2
   }
-  
+
   #checks if the string in argument "x" is in the format of a valid e-mail adress
   isValidEmail <- function(x) {
     grepl(
@@ -641,8 +641,8 @@ shinyServer(function(input,output,session) {
       ignore.case = TRUE
     )
   }
-  
-  
+
+
   ############# BUILD DYNAMIC UI #############
   #Initialise Feedback Form UI Elements
   output$feedbackform <- renderUI({
@@ -658,9 +658,9 @@ shinyServer(function(input,output,session) {
       textOutput("value")
     )
   })
-  
-  ############# REACTIVE FUNCTION ############# 
-  
+
+  ############# REACTIVE FUNCTION #############
+
   #Sends e-mail when "Send"-Button is pressed and e-mail&Captcha have been validated. Otherwise, error messages are shown.
   observeEvent(input$send, {
     msg <- isolate(input$message)
@@ -690,23 +690,23 @@ shinyServer(function(input,output,session) {
     }
   })
 #}
-  
-  
+
+
   # MAPPING STUFF ----
   # MAPPING FUNCTIONS
-  acm_defaults <- function(map, x, y) addCircleMarkers(map, x, y, radius=6, 
-                                                       color="black", fillColor="orange", fillOpacity=1, 
+  acm_defaults <- function(map, x, y) addCircleMarkers(map, x, y, radius=6,
+                                                       color="black", fillColor="orange", fillOpacity=1,
                                                        opacity=1, weight=2, stroke=TRUE, layerId="Selected")
-  
+
   # @knitr server02remainder1
   output$Map <- renderLeaflet({
     leaflet() %>% setView(lon, lat, zoom = 8) %>% addTiles() %>%
-      addProviderTiles("OpenTopoMap",options = providerTileOptions(noWrap = TRUE)) %>% 
-      addCircleMarkers(data=locsUnique[locsUnique$type=="gauge",], radius=6, color="blue", weight=2,stroke=TRUE, fillOpacity=0.9, group="locations", layerId = ~loc) %>% 
+      addProviderTiles("OpenTopoMap",options = providerTileOptions(noWrap = TRUE)) %>%
+      addCircleMarkers(data=locsUnique[locsUnique$type=="gauge",], radius=6, color="blue", weight=2,stroke=TRUE, fillOpacity=0.9, group="locations", layerId = ~loc) %>%
       addCircleMarkers(data=locsUnique[locsUnique$type=="meteo",], radius=6, color="red", weight=2,stroke=TRUE, fillOpacity=0.9, group="locations", layerId = ~loc)
-    
+
   })
-  
+
   # @knitr server02remainder2
   observe({ # show or hide location markers
     proxy <- leafletProxy("Map")
@@ -717,7 +717,7 @@ shinyServer(function(input,output,session) {
       proxy %>% hideGroup("locations") %>% removeMarker(layerId="Selected")
     }
   })
-  
+
   observeEvent(input$Map_marker_click, { # update the map markers and view on map clicks
     p <- input$Map_marker_click
     proxy <- leafletProxy("Map")
@@ -727,14 +727,14 @@ shinyServer(function(input,output,session) {
       proxy %>% setView(lng=p$lng, lat=p$lat, input$Map_zoom) %>% acm_defaults(p$lng, p$lat)
     }
   })
-  
+
   observeEvent(input$Map_marker_click, { # update the location selectInput on map clicks
     p <- input$Map_marker_click
     if(!is.null(p$id)){
       if(is.null(input$location) || input$location!=p$id) updateSelectInput(session, "location", selected=p$id)
     }
   })
-  
+
   observeEvent(input$location, { # update the map markers and view on location selectInput changes
     p <- input$Map_marker_click
     p2 <- subset(locsUnique, loc==input$location)
@@ -747,5 +747,5 @@ shinyServer(function(input,output,session) {
       proxy %>% setView(lng=p2$lon, lat=p2$lat, input$Map_zoom) %>% acm_defaults(p2$lon, p2$lat)
     }
   })
-  
+
 })

@@ -5,6 +5,11 @@
 
 
 # PACKAGES ----
+
+# Needs forecastQ functions, download from github, build package, install & load
+# install.packages("~/Documents/forecastQ_0.0.0.9000.tgz", repos = NULL, type = .Platform$pkgType)
+# > library("forecastQ", lib.loc="/Library/Frameworks/R.framework/Versions/3.4/Resources/library")
+
 library('install.load')
 install_load("shiny")
 install_load("shinyBS")
@@ -45,38 +50,47 @@ install_load('scrapeR')
 #install_load("mailR")
 install_load('devtools')
 
+# Load forecast Q library
 if (Sys.info()["sysname"]=="Darwin"){ # local deployment
-  load_all("/Users/tobiassiegfried/Dropbox (hydrosolutions)/R_Packages/forecastQ")
+  # OSX, Darwin
+  # Files need to be stored in "forecastQ" in Home/Documents
+  path = paste("/Users/",Sys.info()["user"],"/Documents/forecastQ",sep="")
+  load_all(path)
 }else{
   load_all("/srv/shiny-server/forecastQ_CN/forecastQ") # macMini deployment
 }
-  
-  
+
+
 # OPTIONS AND HELPER FUNCTIONS FOR DEBUGGING ----
 options(shiny.error=browser)
 options(httr_oob_default=TRUE) # required to resolve some google_sheets issues on the Unix Server
 
 # INITIAL CONFIGURATIONS ----
 uz <- 0
-cn <- 1
+cn <- 0
+kz <- 1
 
 if (cn==1){ # LOCATION SELECTOR ----
   stationsLoc <- "stationsLoc_CN"
   modelList <- "modelList_CN"
   modelPar <- "modelParameters_CN"
   gaugePM <- "gaugePredictorsMapping_CN"
-} else if (uz==1) 
-{
+} else if (uz==1) {
   stationsLoc <- "stationsLoc_UZ"
   modelList <- "modelList_UZ"
   modelPar <- "modelParameters_UZ"
   gaugePM <- "gaugePredictorsMapping_UZ"
+} else if (kz == 1) {
+  stationsLoc <- "stationsLoc_KZ"
+  modelList <- "modelList_KZ"
+  modelPar <- "modelParameters_KZ"
+  gaugePM <- "gaugePredictorsMapping_KZ"
 } else {
   disp("Region not available!")
 }
 
 # LOAD / SAVE SCHEMES ----
-remote <- 0
+remote <- 1
 remoteFC <- 0
 saveFCremote <- 0
 save.data <- 0
@@ -155,7 +169,7 @@ if (remoteFC==1){
     fileNRemoteMon <- gs_title(paste("forecast_MON_",names(Q)[[idx]],sep=""))
     fileNRemoteDec <- gs_title(paste("forecast_DEC_",names(Q)[[idx]],sep=""))
     forecast.dec[[idx]] <- fileNRemoteDec %>% gs_read(ws="Sheet1",range=cell_rows(1:(model.par$editTableL+1))) %>% as.zoo()
-    forecast.issueDate.dec[[idx]] <- 
+    forecast.issueDate.dec[[idx]] <-
       fileNRemoteDec %>% gs_read(ws="Sheet1",range=cell_limits(c(model.par$editTableL+2,2),c(model.par$editTableL+2,2)))
     forecast.mon[[idx]] <- fileNRemoteMon %>% gs_read(ws="Sheet1",range=cell_rows(1:(model.par$editTableL+1))) %>% as.zoo()
     forecast.issueDate.mon[[idx]] <- fileNRemoteMon %>% gs_read(ws="Sheet1",range=cell_rows(model.par$editTableL+2))
@@ -171,7 +185,6 @@ if (save.data==1){
 } else {
   disp("FINISHED UPDTATING DATA")
 }
-
 
 
 # DECADAL MODELS ----
@@ -192,6 +205,7 @@ if (fitModelDec+fitModelMon==0){
   disp("read data/modelMon.rds")
   disp("SUCESSFULLY LOADED ALL MODELS")
 } else {
+  lags <- model.par$lag
   if (fitModelDec==1){
     # DECADAL MODELS ----
     disp("FITTING DECADAL MODELS")
@@ -225,7 +239,7 @@ if (fitModelDec+fitModelMon==0){
     saveRDS(pred.dec,file="data/predDec.rds")
     saveRDS(model.data.dec,file="data/modelDataDec.rds")
     saveRDS(model.dec,file="data/modelDec.rds")
-  } 
+  }
   # MONTLY MODELS ----
   if (fitModelMon==1){
     disp("FITTING MONTHLY MODELS")
@@ -310,7 +324,7 @@ if (!remoteFC){
   }
   names(forecast.dec) <- names(Q)
   names(forecast.issueDate.dec) <- names(Q)
-  
+
   # Monthly
   forecast.mon <- list()
   forecast.issueDate.mon <- list()

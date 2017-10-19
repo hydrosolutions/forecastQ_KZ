@@ -1,1 +1,1 @@
-# forecastQ_CN
+# forecastQ_KZ

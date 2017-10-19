@@ -5,18 +5,18 @@
 shinyUI(
   navbarPage(
     theme = shinytheme("cosmo"),
-    "FORECAST!",                                                            # TITLE 
+    "FORECAST!",                                                            # TITLE
     tabPanel("Stations Overview", icon = icon("eye"),                       # STATIONS OVERVIEW PANEL ----
              fluidRow(
                column(3,h3("Overview of Available Stations"),
-                      helpText("Available stations are shown on the map. Gauging stations are shown in blue color, meteorological 
+                      helpText("Available stations are shown on the map. Gauging stations are shown in blue color, meteorological
                                stations are indicated in red color. Stations can be selected from the pull down menu or
                                through clicking on the map. The 'View Data' Button displays timeseries graphs as well as corresponding
                                norms and available data from the last two years."),
                       absolutePanel(top=200, left=30,
                                     checkboxInput("show_stations", "Show Stations", TRUE),
                                     conditionalPanel("input.show_stations == true",
-                                                     selectInput("location", "Station", c("", locs$loc), selected="",width='100%'),
+                                                     selectInput("location", "Station", c(" ",locs$loc), selected="",width='100%'),
                                                      conditionalPanel("input.location !== null && input.location !== ''",
                                                                       br(),
                                                                       fluidRow(
@@ -49,25 +49,25 @@ shinyUI(
                )
              )
     ),
-    
+
     tabPanel("Data",icon = icon("database"),                                # DATA PANEL -----
              fluidRow(
                column(3,h3("Station Data"),
-                      helpText("From the pull down menu below, select station for viewing and editing data. You have to 
-                               submit the new data by clicking the corresponding Submit Data button below. The data will be stored remotely 
+                      helpText("From the pull down menu below, select station for viewing and editing data. You have to
+                               submit the new data by clicking the corresponding Submit Data button below. The data will be stored remotely
                                and remain available for later sessions."),
                       # helpText("If you want to ")
-                      selectInput("location_edit", "Select Station", c("", locs$loc), selected="Qilian_520800",width='100%')
+                      selectInput("location_edit", "Select Station", c("", locs$loc), selected="Balykty_1",width='100%')
                ),
                column(9,h3("Enter/Edit New Data"),
                       hr(),
                       h4(textOutput("stationNameEdit")),
                       hr(),
                       fluidRow(
-                        column(3,textOutput("dataTableEdit1TypeText"), 
+                        column(3,textOutput("dataTableEdit1TypeText"),
                                hr(),
-                               rHandsontableOutput("editTable1"), 
-                               hr(), 
+                               rHandsontableOutput("editTable1"),
+                               hr(),
                                actionButton("submitData","Submit New Data")
                                ),
                         column(9,
@@ -79,7 +79,7 @@ shinyUI(
                )
              )
     ),
-    
+
     tabPanel("Models", icon = icon("cog"),                                  # FORECAST PANEL ----
              fluidRow(
                column(3, h3("Information on Models"),
@@ -103,39 +103,39 @@ shinyUI(
                       tabsetPanel(
                         tabPanel("Decadal (10 days) Forecast",h3("Decadal Forecasts"),
                                  helpText(" "),
-                                 h4("521400: Yingluoxia"),
+                                 h4("Nura"),
                                  textOutput("model_16279_dec"),
-                                 tableOutput("model_16279_decEnsemble"),
-                                 helpText(" "),
-                                 h4("520800: Qilian"),
-                                 textOutput("model_16290_dec"),
-                                 tableOutput("model_16290_decEnsemble"),
-                                 helpText(" "),
-                                 h4("520400: Zhamashike"),
-                                 textOutput("model_16294_dec"),
-                                 tableOutput("model_16294_decEnsemble")
+                                 tableOutput("model_16279_decEnsemble")
+                                 #helpText(" "),
+                                 #h4("520800: Qilian"),
+                                 #textOutput("model_16290_dec"),
+                                 #tableOutput("model_16290_decEnsemble"),
+                                 #helpText(" "),
+                                 #h4("520400: Zhamashike"),
+                                 #textOutput("model_16294_dec"),
+                                 #tableOutput("model_16294_decEnsemble")
                         ),
                         tabPanel("Monthly Forecasts",h3("Monthly Forecasts"),
-                                 h4("521400: Yingluoxia"),
+                                 h4("Nura"),
                                  textOutput("model_16279_mon"),
-                                 tableOutput("model_16279_monEnsemble"),
-                                 h4("520800: Qilian"),
-                                 textOutput("model_16290_mon"),
-                                 tableOutput("model_16290_monEnsemble"),
-                                 h4("520400: Zhamashike"),
-                                 textOutput("model_16294_mon"),
-                                 tableOutput("model_16294_monEnsemble")
+                                 tableOutput("model_16279_monEnsemble")
+                                 #h4("520800: Qilian"),
+                                 #textOutput("model_16290_mon"),
+                                 #tableOutput("model_16290_monEnsemble"),
+                                 #h4("520400: Zhamashike"),
+                                 #textOutput("model_16294_mon"),
+                                 #tableOutput("model_16294_monEnsemble")
                         ),
                         tabPanel("Seasonal Forecasts (under dev)",h3("Seasonal Forecasts - Stay tuned"),
-                                 h4("521400: Yingluoxia"),
-                                 h4("520800: Qilian"),
-                                 h4("520400: Zhamashike")
+                                 h4("Nura")
+                                 #h4("520800: Qilian"),
+                                 #h4("520400: Zhamashike")
                         )
                       )
                )
              )
     ),
-    
+
     tabPanel("Forecast", icon = icon("signal"),                             # FORECAST PANEL ----
              fluidRow(
                column(3, h3("Forecast Information"),
@@ -151,42 +151,42 @@ shinyUI(
                column(9,
                       tabsetPanel(
                         tabPanel("Decadal (10 days) Forecast",h3("Decadal Forecasts"),
-                                 h4("521400: Yingluoxia"),
+                                 h4("Nura"),
                                  verbatimTextOutput("fc521400dec"),
-                                 plotOutput("obsFcComp521400dec"),
-                                 h4("520800: Qilian"),
-                                 verbatimTextOutput("fc520800dec"),
-                                 plotOutput("obsFcComp520800dec"),
-                                 h4("520400: Zhamashike"),
-                                 verbatimTextOutput("fc520400dec"),
-                                 plotOutput("obsFcComp520400dec")
-                                 
+                                 plotOutput("obsFcComp521400dec")
+                                 #h4("520800: Qilian"),
+                                 #verbatimTextOutput("fc520800dec"),
+                                 #plotOutput("obsFcComp520800dec"),
+                                 #h4("520400: Zhamashike"),
+                                 #verbatimTextOutput("fc520400dec"),
+                                 #plotOutput("obsFcComp520400dec")
+
                         ),
                         tabPanel("Monthly Forecasts",h3("Monthly Forecasts"),
-                                 h4("521400: Yingluoxia"),
+                                 h4("Nura"),
                                  verbatimTextOutput("fc521400mon"),
-                                 plotOutput("obsFcComp521400mon"),
-                                 h4("520800: Qilian"),
-                                 verbatimTextOutput("fc520800mon"),
-                                 plotOutput("obsFcComp520800mon"),
-                                 h4("520400: Zhamashike"),
-                                 verbatimTextOutput("fc520400mon"),
-                                 plotOutput("obsFcComp520400mon")
+                                 plotOutput("obsFcComp521400mon")
+                                 #h4("520800: Qilian"),
+                                 #verbatimTextOutput("fc520800mon"),
+                                 #plotOutput("obsFcComp520800mon"),
+                                 #h4("520400: Zhamashike"),
+                                 #verbatimTextOutput("fc520400mon"),
+                                 #plotOutput("obsFcComp520400mon")
                         ),
                         tabPanel("Seasonal Forecasts (under dev)",h3("Seasonal Forecasts - Stay Tuned"),
-                                 h4("521400: Yingluoxia"),
-                                 h4("520800: Qilian"),
-                                 h4("520400: Zhamashike")
+                                 h4("Nura")
+                                 #h4("520800: Qilian"),
+                                 #h4("520400: Zhamashike")
                         )
                       )
                )
              )
     ),
-    #
+
     tabPanel("Assessment of Forecast Quality", icon = icon("check-circle"), # ASSESSMENT OF FORECAST QUALITY PANEL ----
              fluidRow(
                column(3, h3("Assessment of Forecast Quality"),
-                      helpText("Assessment of quality of forecasts based on past model test performance up and including 
+                      helpText("Assessment of quality of forecasts based on past model test performance up and including
                                the last known values. The test set includes
                                data from January 2000 until and including the last known data. the quality criteria are shown as red and blue
                                lines respectively where, for each decade, the red line is 0.674 * rmse(delta Q)/std(Q) in the case of the decadal
@@ -196,25 +196,25 @@ shinyUI(
                column(9,
                       tabsetPanel(
                         tabPanel("Decadal (10 days) Forecast Quality",h3("Assessment of Decadal Forecast Quality"),
-                                 h4("521400: Yingluoxia"),
-                                 plotOutput("forecastQual_16279_dec"),
-                                 h4("520800: Qilian"),
-                                 plotOutput("forecastQual_16290_dec"),
-                                 h4("520400: Zhamashike"),
-                                 plotOutput("forecastQual_16294_dec")
+                                 h4("Nura"),
+                                 plotOutput("forecastQual_16279_dec")
+                                 #h4("520800: Qilian"),
+                                 #plotOutput("forecastQual_16290_dec"),
+                                 #h4("520400: Zhamashike"),
+                                 #plotOutput("forecastQual_16294_dec")
                         ),
                         tabPanel("Monthly Forecast Quality",h3("Assessment of Monthly Forecast Quality"),
-                                 h4("521400: Yingluoxia"),
-                                 plotOutput("forecastQual_16279_mon"),
-                                 h4("520800: Qilian"),
-                                 plotOutput("forecastQual_16290_mon"),
-                                 h4("520400: Zhamashike"),
-                                 plotOutput("forecastQual_16294_mon")
+                                 h4("Nura"),
+                                 plotOutput("forecastQual_16279_mon")
+                                 #h4("520800: Qilian"),
+                                 #plotOutput("forecastQual_16290_mon"),
+                                 #h4("520400: Zhamashike"),
+                                 #plotOutput("forecastQual_16294_mon")
                         ),
                         tabPanel("Seasonal Forecast Quality (under dev)",h3("Assessment of Seasonal Forecast Quality - Stay tuned"),
-                                 h4("521400: Yingluoxia"),
-                                 h4("520800: Qilian"),
-                                 h4("520400: Zhamashike")
+                                 h4("Nura")
+                                 #h4("520800: Qilian"),
+                                 #h4("520400: Zhamashike")
                         )
                       )
                )
